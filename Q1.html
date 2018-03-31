@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      // Q1
+      // generate Arrays which include capitalized letters and small letters respectively
+      var capTable = getArray(65, 91);// capitalized letters
+      var smallTable = getArray(97, 123);// small letters
+
+      // cipherText (could be changed)
+      // var cipherText = "ZLJBYPAF";
+      var cipherText = "CSYEVIXIVQMREXIH";
+      var plainTexts = myDecrypt(cipherText);
+      for(var i in plainTexts)
+      {
+        document.write("shift by " + i + " : " + plainTexts[i] + "<br>");
+      }
+
+
+      /**
+       * the function which decrypts cipherText to plainText
+       * @param String cipherText
+       * @return String plainText
+       */
+      function myDecrypt(cipherText)
+      {
+        var n = [0, 26];
+        try {
+          if (typeof cipherText != "string")
+          {
+            throw new TypeError("cipherText is not a string");
+          }
+          var cipherText = cipherText.toUpperCase();
+          var collection = {};
+          for (var j = n[0]; j < n[1];j++)
+          {
+            var returnString = "";
+            var table = generateCorrTable(smallTable, capTable, j)
+            for (var i = 0;i < cipherText.length;i++)
+            {
+              returnString += table[cipherText[i]];
+            }
+            collection[j] = returnString.toLowerCase();
+          }
+          return collection;
+        } catch (e) {
+          console.log(e.message);
+          return "";
+        }
+      }
+
+      /**
+       * the function which generates correspondence table
+       * @param Array originalCodes
+       * @param Array conversionCodes
+       * @param Integer n --- type by "n"
+       * @return jsonObject
+       */
+      function generateCorrTable(originalCodes, conversionCodes, n)
+      {
+        try {
+          if (!originalCodes instanceof Array || !conversionCodes instanceof Array)
+          {
+            throw new TypeError("originalCodes or conversionCodes are illegal");
+          }
+          if (originalCodes.length != conversionCodes.length)
+          {
+            throw new TypeError("originalCodes or conversionCodes are illegal");
+          }
+          if (n < 0)
+          {
+            throw new RangeError("n is illegal");
+          }
+          else
+          {
+            conCodes = processCodes(conversionCodes, n);
+            var corresCode = {};
+            for (var i = 0;i < originalCodes.length;i++)
+            {
+              corresCode[originalCodes[i]] = conCodes[i];
+              corresCode[conCodes[i]] = originalCodes[i];
+            }
+            return corresCode;
+          }
+
+        } catch (e) {
+          console.log(e.message);
+          return {};
+        }
+      }
+
+      /**
+       * the function which processes conversionCodes
+       * @param Array conversionCodes
+       * @param Integer n --- type by "n"
+       * @return Array processed codes
+       */
+       function processCodes(conversionCodes, n)
+       {
+         var generatedArr = conversionCodes.slice(0);
+         for (var i = 0;i < n;i++)
+         {
+           var item = generatedArr.shift();
+           generatedArr.push(item);
+         }
+         return generatedArr;
+       }
+
+      /**
+       * the function which gets letters with ASCII
+       * @param Integer from
+       * @param Integer to
+       * @return String plainText
+       */
+      function getArray(from, to){
+        try {
+          if (from > to)
+          {
+            throw new RangeError("params are not legal");
+          }
+          if (from == to)
+          {
+            return arr.push(String.fromCharCode(from));
+          }
+          var arr = [];
+          for(var i = from; i < to; i++){
+              arr.push(String.fromCharCode(i));
+          }
+          return arr;
+        } catch (e) {
+          console.log(e.message);
+          return [];
+        }
+      }
+    </script>
+  </body>
+</html>
